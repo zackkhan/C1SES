@@ -4,6 +4,68 @@ var fs = require("fs");
 var path = require('path');
 var rp = require('request-promise');
 
+var creditCards = [
+  {
+    name: "Venture Rewards",
+    cashBack: 0.02,
+    yearFee: 0, //Annual Fee
+    interestRate: 0.2349, //Interest Rate
+    signBonus: 100, //Signup Bonus
+    signUpLen: 3, //Signup promo length
+    promoLen: 0, //Promotional Interest Length
+    tranFee: 0, //Transfer Fee Percentage
+    introLen: 0, //Transfer Introductory Interest Rate
+    minSpend: 500
+  },
+  {
+    name: "Quicksilver Rewards",
+    cashBack: 0.015,
+    yearFee: 0, //Annual Fee
+    interestRate: 0.2349, //Interest Rate
+    signBonus: 100, //Signup Bonus
+    signUpLen: 3, //Signup promo length
+    promoLen: 9, //Promotional Interest Length
+    tranFee: 0.03, //Transfer Fee Percentage
+    introLen: 9, //Transfer Introductory Interest Rate
+    minSpend: 500
+  },
+  {
+    name: "VentureOne Rewards",
+    cashBack: 0.0125,
+    yearFee: 0, //Annual Fee
+    interestRate: 0.2249, //Interest Rate
+    signBonus: 2000, //Signup Bonus
+    signUpLen: 3, //Signup promo length
+    promoLen: 12, //Promotional Interest Length
+    tranFee: 0, //Transfer Fee Percentage
+    introLen: 0, //Transfer Introductory Interest Rate
+    minSpend: 1000
+  },
+  {
+    name: "QuicksilverOne Rewards",
+    cashBack: 0.015,
+    yearFee: 39, //Annual Fee
+    interestRate: 0.2499, //Interest Rate
+    signBonus: 0, //Signup Bonus
+    signUpLen: 0, //Signup promo length
+    promoLen: 0, //Promotional Interest Length
+    tranFee: 0, //Transfer Fee Percentage
+    introLen: 0, //Transfer Introductory Interest Rate
+    minSpend: 0
+  },
+  {
+    name: "Platinum",
+    cashBack: 0,
+    yearFee: 0, //Annual Fee
+    interestRate: 0.2499, //Interest Rate
+    signBonus: 0, //Signup Bonus
+    signUpLen: 0, //Signup promo length
+    promoLen: 0, //Promotional Interest Length
+    tranFee: 0, //Transfer Fee Percentage
+    introLen: 0, //Transfer Introductory Interest Rate
+    minSpend: 0
+  }
+];
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'C1 Credit Card' });
@@ -71,6 +133,10 @@ router.get('/judgingYou', function(req, res, next){
 
 router.get('/suggestion', function(req, res, next){
   res.render('suggestion', { title: 'Suggest a Card' });
+});
+
+router.get('/cardBuilder', function(req, res, next){
+  res.render('cardBuilder', { title: 'Build a Card' });
 });
 
 module.exports = router;
