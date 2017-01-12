@@ -4,7 +4,11 @@ block content
   h1= title
   p Welcome to #{title}
 
-  |= #{income}
-  |= #{debt}
-  |= #{zip}
+  - if (typeof(email) !== 'undefined'){
+    |= #{email}
+  - } else {
+    |= #{income}
+    |= #{debt}
+    |= #{zip}
+  - }
   |= #{cashortravel}

@@ -11,7 +11,9 @@ router.get('/customizeCard', function(req, res, next){
 });
 
 router.post('/judgeUser', function(req, res, next){
-  //res.render('judging', { title: 'Judging You' });
+  res.redirect("/judgingYou?email=" + req.body.email
+    + "&cashortravel=" + req.body.cashortravel
+  );
 });
 
 router.post('/judgeCard', function(req, res, next){
@@ -25,13 +27,22 @@ router.post('/judgeCard', function(req, res, next){
 });
 
 router.get('/judgingYou', function(req, res, next){
-    res.render('judging', 
-    { title: 'Judging You', 
-      income: req.query.income, 
-      debt: req.query.debt, 
-      zip: req.query.zip, 
-      cashortravel: req.query.cashortravel 
-    });
+      
+    if(req.query.email){
+      res.render('judging', 
+      { title: 'Judging You', 
+        email: req.query.email,
+        cashortravel: req.query.cashortravel
+      });
+    } else {
+      res.render('judging', 
+      { title: 'Judging You', 
+        income: req.query.income, 
+        debt: req.query.debt, 
+        zip: req.query.zip, 
+        cashortravel: req.query.cashortravel 
+      });
+    }
 });
 
 router.get('/suggestion', function(req, res, next){
