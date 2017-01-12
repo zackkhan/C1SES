@@ -10,6 +10,10 @@ router.get('/customizeCard', function(req, res, next){
   res.render('customize', { title: 'Customize Card' });
 });
 
+router.post('/judgeCard', function(req, res, next){
+  //res.render('judging', { title: 'Judging You' });
+});
+
 router.get('/judgingYou', function(req, res, next){
   res.render('judging', { title: 'Judging You' });
 });
