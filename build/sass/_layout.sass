@@ -5,12 +5,21 @@
         left: 0
         right: 0
         bottom: 0
+    *
+        overflow-y: hidden
+        overflow-x: hidden
+
+        &::-webkit-scrollbar
+            display: none
 
     .main-wrapper
         +pos-center-col
         background-color: $background
-        height: 100vh
         width: 100% 
+        height: 100%
 
     .main-content
         margin: 1rem
+        height: auto
+        overflow-y: scroll
+    

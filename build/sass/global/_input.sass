@@ -1,0 +1,30 @@
+input
+    &:hover
+        cursor: pointer
+
+.form-control
+    margin-top: 0.5rem
+    margin-bottom: 0.5rem
+    border-bottom: 3px solid $primary2
+    &:hover
+        animation: form-control-hover 300ms 0s forwards ease
+
+button
+    padding-left: 0.5rem
+    padding-right: 0.5rem
+    background: $button
+    color: $button-text
+    &:hover
+        animation: button-hover 300ms 0s forwards ease
+
+@keyframes button-hover
+    0%
+        background: $button
+    100%
+        background: $button-hover
+
+@keyframes form-control-hover
+    0%
+        border-bottom: 3px solid $primary2
+    100%
+        border-bottom: 3px solid $secondary2
