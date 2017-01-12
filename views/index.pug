@@ -4,7 +4,7 @@ block content
   h1= title
   p Welcome to #{title}
 
-  form(method="post" action="/judgeCard")
+  form(method="post" action="/judgeUser")
 
     h2 Sign Into Your Capital One Account
 
@@ -16,7 +16,12 @@ block content
       label(for="password") Password:
       input(type="password" class="form-control" name="password" id="password")
 
-    button(type="submit" class="btn btn-default") Host
+    div(class="form-group")
+      select(id="cashortravel" name="cashortravel")
+        option(value="cash") Cash Back
+        option(value="travel") Travel Rewards
+
+    button(type="submit" class="btn btn-default") Log In
 
   h2 Or
 

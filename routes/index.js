@@ -10,12 +10,28 @@ router.get('/customizeCard', function(req, res, next){
   res.render('customize', { title: 'Customize Card' });
 });
 
-router.post('/judgeCard', function(req, res, next){
+router.post('/judgeUser', function(req, res, next){
   //res.render('judging', { title: 'Judging You' });
 });
 
+router.post('/judgeCard', function(req, res, next){
+
+  res.redirect("/judgingYou?income=" + req.body.income 
+    + "&debt=" + req.body.debt
+    + "&zip=" + req.body.zip
+    + "&cashortravel=" + req.body.cashortravel
+  );
+
+});
+
 router.get('/judgingYou', function(req, res, next){
-  res.render('judging', { title: 'Judging You' });
+    res.render('judging', 
+    { title: 'Judging You', 
+      income: req.query.income, 
+      debt: req.query.debt, 
+      zip: req.query.zip, 
+      cashortravel: req.query.cashortravel 
+    });
 });
 
 router.get('/suggestion', function(req, res, next){
