@@ -11,18 +11,22 @@ input
     &:hover
         animation: form-control-hover 300ms 0s forwards ease
 
+.link-buttons
+    +pos-center-row
+    
 label
     font-style: italic
     color: $secondary2
     font-weight: bold
 
-button
+button, .link-to-page
     padding-left: 0.5rem
     padding-right: 0.5rem
     background: $button
     color: $button-text
     &:hover
         animation: button-hover 300ms 0s forwards ease
+
 
 @keyframes button-hover
     0%
