@@ -1,0 +1,26 @@
+$bag-fill: beige
+$bag-edge: tan
+
+.bag
+    +pos-center-col
+    *
+        border: solid $bag-edge
+        border-width: 3px 10px 6px 1px
+    .top
+        z-index: 1
+        margin-bottom: -20px
+        border-radius: 10% 10% 40% 80%
+        background-color: $bag-fill
+        height: 40px
+        width: 30px
+    .bottom
+        +pos-center-col
+        &:after
+            font-size: 50px
+            color: $secondary1
+            content: '$'
+        z-index: 0
+        border-radius: 50% 50% 10% 30%
+        background-color: $bag-fill
+        height: 100px
+        width: 100px

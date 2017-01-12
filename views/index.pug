@@ -1,8 +1,11 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .title-area
+    .title-text
+      h1= title
+      p Welcome to #{title}
+    include mixins/_bag
 
   form(method="post" action="/judgeUser")
 
