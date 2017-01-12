@@ -3,6 +3,14 @@ extends layout
 block content
   include headers/_customize
 
+  script.
+    $( function() {
+      var locations = [!{locations}];
+      $( "#loc" ).autocomplete({
+        source: locations
+      });
+    });
+
   form(method="post" action="/judgeCard")
 
     h2 Choose your preferences
@@ -20,8 +28,8 @@ block content
       input(type="number" class="form-control" name="debt" id="debt" placeholder="Debt")
 
     div(class="form-group")
-      label(for="location") Zip Code
-      input(type="number" class="form-control" name="zip" id="zip" placeholder="Zip Code")
+      label(for="location") Metro Area/State
+      input(type="text" class="form-control" name="loc" id="loc" placeholder="City/State")
     
     div(class="form-group")
       select(id="cashortravel" name="cashortravel")
