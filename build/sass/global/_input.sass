@@ -3,6 +3,8 @@ input, button
         cursor: pointer
 
 input
+    &:focus
+        outline: none
     width: 180px
     margin-left: 0.5rem
     margin-top: 0.5rem
@@ -33,7 +35,7 @@ button, .link-to-page
         background: $button
     100%
         background: $button-hover
-
+        
 @keyframes form-control-hover
     0%
         border-bottom: 3px solid $primary2
