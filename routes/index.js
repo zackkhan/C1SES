@@ -132,7 +132,7 @@ router.get('/suggestion', function(req, res, next){
     var tempSpend = 0; //Placeholder spend value
 
 
-    if(req.query.password){
+    if(req.query.email && !req.query.loc){
 
       rp('http://api.reimaginebanking.com/accounts/5877e7481756fc834d8eace6/purchases?key=b86dd9297128e1a6a6b8e0821692d691').then(function(response){
 
@@ -143,18 +143,20 @@ router.get('/suggestion', function(req, res, next){
           var monthlyBalanceArr = [0,0,0,0,0,0,0,0,0,0,0,0,0];
           var index;
 
+          debt = 0;
+
           for (var i=0; i<transactionArr.length; i++) {
 
               amountArr.push(transactionArr[i].amount);
               dateArr.push(transactionArr[i].purchase_date);
 
               index = parseInt(transactionArr[i].purchase_date.substring(5,7).replace('-', '')) - 1;
-              
+
               monthlySpendArr[index] += transactionArr[i].amount;
 
           }
           var balance = 16000;
-          for (var i =0; i<monthlyBalanceArr.length; i++)
+          for (i =0; i<monthlyBalanceArr.length; i++)
           {
               monthlyBalanceArr[i] = balance - monthlySpendArr[i];
               balance = monthlyBalanceArr[i];
@@ -172,7 +174,6 @@ router.get('/suggestion', function(req, res, next){
           var totalInterest = 0; //Total Interest
           var fitness = 0; //Direct Card compare
 
-          var hasCapitalOne = true; //Boolean for if the customer has a Capital One Account
 
           var cardPref = req.query.cashortravel;
 
@@ -210,15 +211,15 @@ router.get('/suggestion', function(req, res, next){
                           return monthlySpendArr[x];
                       }
 
+                      function mBal(x){
+
+                          return monthlyBalanceArr[x];
+                      }
+
                       var tSpend = monthlySpendArr.reduce(function (a, b) {
                           return a + b;
                       }, 0); //Sets tSpend to the total annual spend
 
-
-                      function mBalance(x) { //Monthly Account Balance
-
-                          return monthlyBalanceArr[x];
-                      }
 
                       var cMonth = new Date().getMonth(); //Current Month
 
@@ -231,17 +232,19 @@ router.get('/suggestion', function(req, res, next){
                       }
                       //If the minimum spend is cleared, do no change the Signup Bonus
                       //If not the bonus is set to zero
-                      if (tempSpend < minSpend) signBonus = 0;
+                      if (tempSpend < minSpend)
+                        {signBonus = 0;}
+
                       tempSpend = 0;
                       //for (var x = 0; x < 4; x++) {
                       //Calculates the interest paid on the monthly balance/cash flow
-                      for (var i = 0; i < (12 - promoLen); i++) {
-                          tempSpend += interestRate * (mSpend((i + promoLen + cMonth) % 12)) * (x * 0.15);
+                      for (i = 0; i < (12 - promoLen); i++) {
+                          tempSpend += (interestRate * mSpend((i + promoLen + cMonth) % 12) * (x * 0.15));
                       }
+
 
                       //Total Interest Cost
                       totalInterest = (debt * tranFee) + tempSpend + (debt * interestRate * (12 - introLen));
-
 
                       /*
                        Total Rewards + Signup Bonus = Total Cash Benefit value for 1st Calendar year
@@ -254,19 +257,19 @@ router.get('/suggestion', function(req, res, next){
                           pref = 0.75;
                       } else pref = 1;
 
-                      fitness = (totalRewards + signBonus - totalInterest) * pref;
+                      fitness = (totalRewards + signBonus - tempSpend) * pref;
 
                       //Adds the fitness, Total Rewards, and Total Interest to individual arrays,
                       //in order by the original card order
 
 
                       resultsFitness.push(fitness.toFixed(0));
-                     // console.log("fitness ", fitness);
+                      //console.log("fitness ", fitness);
                       resultsTotalRewards.push(totalRewards.toFixed(0));
-                     // console.log("Total Rewards ", totalRewards);
-                      resultsTotalInterest.push(totalInterest.toFixed(0));
+                      //console.log("Total Rewards ", totalRewards);
+                      resultsTotalInterest.push(tempSpend.toFixed(0));
                       resultsSignBonus.push(signBonus.toFixed(0));
-                     // console.log("sign bonus: ", signBonus);
+                      //console.log("sign bonus: ", signBonus);
                      // console.log("interest ", -totalInterest);
                      // console.log("Rate ", (x * 0.15), " \n");
 
@@ -283,7 +286,7 @@ router.get('/suggestion', function(req, res, next){
                   metaSignBonuses.push(resultsSignBonus);
 
               }
-                console.log(metaResultsFitness);
+
               res.render('suggestion',
                   {
                       title: 'Card Suggestion',
@@ -296,7 +299,9 @@ router.get('/suggestion', function(req, res, next){
                       bestCard: bestCard,
                       maxFitness: maxFitness
                   });
-
+          console.log(metaResultsTotalInterest);
+          console.log(metaResultsTotalRewards);
+          console.log(metaSignBonuses);
 
       });
     } else {
@@ -314,10 +319,7 @@ router.get('/suggestion', function(req, res, next){
         var bestCard = 0;
 
 
-        if(income > 30000)
-            mSpend_fixed = (income - (2000))/12;
-        else
-            mSpend_fixed = (income - (250))/12;
+        mSpend_fixed = req.query.cost/12;
 
         for (var x = 0; x < 4; x++) {
             /*Iterates through each card using the customer data and outputs the results in order
@@ -359,7 +361,7 @@ router.get('/suggestion', function(req, res, next){
                 }
                 //If the minimum spend is cleared, do no change the Signup Bonus
                 //If not the bonus is set to zero
-                if (tempSpend < minSpend) signBonus = 0;
+                if (tempSpend < minSpend){signBonus = 0;}
                 tempSpend = 0;
                 //for (var x = 0; x < 4; x++) {
                 //Calculates the interest paid on the monthly balance/cash flow
@@ -387,16 +389,16 @@ router.get('/suggestion', function(req, res, next){
                 //Adds the fitness, Total Rewards, and Total Interest to individual arrays,
                 //in order by the original card order
 
-                resultsFitness.push(fitness);
+                resultsFitness.push(fitness.toFixed(0));
                 //console.log("fitness ", fitness);
                 if(fitness > maxFitness){
                     maxFitness = fitness;
                     bestCard = k;
                 }
-                resultsTotalRewards.push(totalRewards);
+                resultsTotalRewards.push(totalRewards.toFixed(0));
                 //console.log("Total Rewards ", totalRewards);
-                resultsTotalInterest.push(totalInterest);
-                resultsSignBonus.push(signBonus);
+                resultsTotalInterest.push(totalInterest.toFixed(0));
+                resultsSignBonus.push(signBonus.toFixed(0));
                 //console.log("sign bonus: ", signBonus);
                 //console.log("interest ", -totalInterest);
                 //console.log("Rate ", (x * 0.15), " \n");
@@ -408,7 +410,7 @@ router.get('/suggestion', function(req, res, next){
             metaResultsTotalRewards.push(resultsTotalRewards);
             metaSignBonuses.push(resultsSignBonus);
 
-            console.log(metaSignBonuses);
+
         }
         res.render('suggestion', 
             { 
@@ -426,6 +428,10 @@ router.get('/suggestion', function(req, res, next){
                 bestCard: bestCard
 
             });
+
+        console.log(metaResultsTotalInterest);
+        console.log(metaResultsTotalRewards);
+        console.log(metaSignBonuses);
     }
 });
 router.get('/cardBuilder', function(req, res, next){
