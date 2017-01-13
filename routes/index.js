@@ -284,6 +284,19 @@ router.get('/suggestion', function(req, res, next){
 
               }
                 console.log(metaResultsFitness);
+              res.render('suggestion',
+                  {
+                      title: 'Card Suggestion',
+                      email: req.query.email,
+                      cashortravel: req.query.cashortravel,
+                      fitnesses: metaResultsFitness,
+                      totalRewards: metaResultsTotalRewards,
+                      totalInterests: metaResultsTotalInterest,
+                      signBonuses: metaSignBonuses,
+                      bestCard: bestCard,
+                      maxFitness: maxFitness
+                  });
+
 
       });
     } else {
