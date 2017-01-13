@@ -122,8 +122,15 @@ router.post('/judgeCard', function(req, res, next){
 });
 
 router.get('/suggestion', function(req, res, next){
-      
-    if(req.query.email){
+
+    //Customer (from fields on Site)
+    var debt = req.query.debt; //Customer debt
+    var income = req.query.income; //Customer Income
+    var pref = 1; //Preference for miles or cash back card, Yes = 1 No = 0.75
+    var tempSpend = 0; //Placeholder spend value
+
+
+    if(req.query.email  ){
 
       rp('http://api.reimaginebanking.com/accounts/5877e7481756fc834d8eace6/purchases?key=b86dd9297128e1a6a6b8e0821692d691').then(function(response){
 
@@ -144,16 +151,12 @@ router.get('/suggestion', function(req, res, next){
               monthlySpendArr[index] += transactionArr[i].amount;
 
           }
-          
-          console.log(monthlySpendArr);
           var balance = 16000;
           for (var i =0; i<monthlyBalanceArr.length; i++)
           {
               monthlyBalanceArr[i] = balance - monthlySpendArr[i];
               balance = monthlyBalanceArr[i];
           }
-          console.log(monthlyBalanceArr);
-
 
 
           var metaResultsFitness = [];
@@ -162,24 +165,18 @@ router.get('/suggestion', function(req, res, next){
           var metaSignBonuses = [];
 
 
-          //Customer (from fields on Site)
-          var debt = 0; //Customer debt
-          var income = 0; //Customer Income
-          var pref = 1; //Preference for miles or cash back card, Yes = 1 No = 0.75
-          var tempSpend = 0; //Placeholder spend value
-
           //Will calculate with each card info
           var totalRewards = 0; //Total Rewards
           var totalInterest = 0; //Total Interest
           var fitness = 0; //Direct Card compare
 
           var hasCapitalOne = true; //Boolean for if the customer has a Capital One Account
-          var cardPref = "cash";
+          var cardPref = req.query.cashortravel;
 
 
               for (var x = 0; x < 4; x++) {
                   /*Iterates through each card using the customer data and outputs the results in order
-                  to a set of arrays */
+                   to a set of arrays */
                   var resultsFitness = [];
                   var resultsTotalRewards = [];
                   var resultsTotalInterest = [];
@@ -187,7 +184,6 @@ router.get('/suggestion', function(req, res, next){
 
 
                   for (var k = 0; k < creditCards.length; k++) {
-
 
 
                       var cashBack = creditCards[k]["cashBack"];
@@ -202,7 +198,7 @@ router.get('/suggestion', function(req, res, next){
                       var minSpend = creditCards[k]["minSpend"]; //Signup bonus minimum spend
                       var cardType = creditCards[k]["type"]; //The type of card Miles or Cash Back
 
-                      console.log("Card: ", creditCards[k]["name"]);
+                      //console.log("Card: ", creditCards[k]["name"]);
 
                       function mSpend(x) { //Monthly Spending calculator
 
@@ -243,10 +239,10 @@ router.get('/suggestion', function(req, res, next){
 
 
                       /*
-                      Total Rewards + Signup Bonus = Total Cash Benefit value for 1st Calendar year
-                      Total Interest = Total Interest/Fee payement for 1st Calendar year
-                      Fitness = In dollars the net cost/benefit for a card, this is what is directly compared between cards
-                      */
+                       Total Rewards + Signup Bonus = Total Cash Benefit value for 1st Calendar year
+                       Total Interest = Total Interest/Fee payement for 1st Calendar year
+                       Fitness = In dollars the net cost/benefit for a card, this is what is directly compared between cards
+                       */
 
                       //Calc pref value - weights the desired card type
                       if (cardPref !== cardType) {
@@ -258,15 +254,15 @@ router.get('/suggestion', function(req, res, next){
                       //Adds the fitness, Total Rewards, and Total Interest to individual arrays,
                       //in order by the original card order
 
-                      resultsFitness.push(fitness);
-                      console.log("fitness ", fitness);
-                      resultsTotalRewards.push(totalRewards);
-                      console.log("Total Rewards ", totalRewards);
-                      resultsTotalInterest.push(totalInterest);
-                      resultsSignBonus.push(signBonus);
-                      console.log("sign bonus: ", signBonus);
-                      console.log("interest ", -totalInterest);
-                      console.log("Rate ", (x * 0.15), " \n");
+                      resultsFitness.push(fitness.toFixed(0));
+                     // console.log("fitness ", fitness);
+                      resultsTotalRewards.push(totalRewards.toFixed(0));
+                     // console.log("Total Rewards ", totalRewards);
+                      resultsTotalInterest.push(totalInterest.toFixed(0));
+                      resultsSignBonus.push(signBonus.toFixed(0));
+                     // console.log("sign bonus: ", signBonus);
+                     // console.log("interest ", -totalInterest);
+                     // console.log("Rate ", (x * 0.15), " \n");
 
                   }
 
@@ -294,7 +290,14 @@ router.get('/suggestion', function(req, res, next){
       });
     } else {
 
-    var mSpend_fixed;
+        var cardPref = req.query.cashortravel;
+        var metaResultsFitness = [];
+        var metaResultsTotalRewards = [];
+        var metaResultsTotalInterest = [];
+        var metaSignBonuses = [];
+
+
+        var mSpend_fixed;
 
     if(income > 30000)
         mSpend_fixed = (income - (2000))/12;
@@ -324,7 +327,7 @@ router.get('/suggestion', function(req, res, next){
             var cardType = creditCards[k]["type"]; //The type of card Miles or Cash Back
 
 
-            console.log("Card: ", creditCards[k]["name"]);
+            //console.log("Card: ", creditCards[k]["name"]);
 
 
             var tSpend = mSpend_fixed * 12; //Sets tSpend to the total annual spend
@@ -393,7 +396,11 @@ router.get('/suggestion', function(req, res, next){
         debt: req.query.debt, 
         loc: req.query.loc, 
         cashortravel: req.query.cashortravel,
-        cost: req.query.cost
+        cost: req.query.cost,
+          totalRewards: metaResultsTotalRewards,
+          totalInterests: metaResultsTotalInterest,
+          signBonuses: metaSignBonuses,
+          fitnesses: metaResultsFitness
       });
     }
     }
