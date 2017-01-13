@@ -304,6 +304,12 @@ router.get('/suggestion', function(req, res, next){
     for (var x = 0; x < 4; x++) {
         /*Iterates through each card using the customer data and outputs the results in order
          to a set of arrays */
+        var resultsFitness = [];
+        var resultsTotalRewards = [];
+        var resultsTotalInterest = [];
+        var resultsSignBonus = [];
+
+        for (var k = 0; k < creditCards.length; k++) {
 
             var cashBack = creditCards[k]["cashBack"];
             var yearFee = creditCards[k]["yearFee"];//Annual Fee
