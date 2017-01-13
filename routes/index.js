@@ -3,6 +3,8 @@ var router = express.Router();
 var fs = require("fs");
 var path = require('path');
 var rp = require('request-promise');
+var xoauth2 = require('xoauth2');
+var nodemailer = require('nodemailer');
 
 var creditCards = [
   {
@@ -400,6 +402,24 @@ router.get('/suggestion', function(req, res, next){
 })
 router.get('/cardBuilder', function(req, res, next){
   res.render('cardBuilder', { title: 'Build a Card' });
+});
+
+router.get('/congrats', function(req, res, next){
+  var transporter = nodemailer.createTransport('smtps://user%40gmail.com:pass@smtp.gmail.com');
+  var mailOptions = {
+      from: '"Fred Foo ?" <thdarkblue14@gmail.com>', // sender address
+      to: 'thdarkblue14@gmail.com', // list of receivers
+      subject: 'Hello', // Subject line
+      text: 'Hello world ?', // plaintext body
+      html: '<b>Hello world ?</b>' // html body
+  };
+  transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+          return console.log(error);
+      }
+      console.log('Message sent: ' + info.response);
+  });
+  res.render('congrats', { title: 'Congratulations! Your Capital One Card Has Been Built.' });
 });
 
 module.exports = router;
