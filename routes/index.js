@@ -167,25 +167,24 @@ router.get('/suggestion', function(req, res, next){
               var yearFee = creditCards[k]["yearFee"];//Annual Fee
               var interestRate = creditCards[k]["interestRate"]/12; //Interest Rate by Month
 
-
               var signBonus = creditCards[k]["signBonus"]; //Signup Bonus
               var signUpLen = creditCards[k]["signUpLen"]; //Signup promo length
               var promoLen = creditCards[k]["promoLen"]; //Promotional Interest Length
-              var tranFee = creditCards[k]["tranFree"]; //Transfer Fee Percentage
+              var tranFee = creditCards[k]["tranFee"]; //Transfer Fee Percentage
               var introLen = creditCards[k]["introLen"]; //Transfer Introductory Interest Rate
               var minSpend = creditCards[k]["minSpend"]; //Signup bonus minimum spend
 
 
               function mSpend(x){ //Monthly Spending calculator
-
-                  return monthlySpendArr[x-1];
+                  
+                  return monthlySpendArr[x];
               }
 
               var tSpend = monthlySpendArr.reduce(function(a, b) { return a + b; }, 0); //Sets tSpend to the total annual spend
 
               function mBalance(x){ //Monthly Account Balance
 
-                  return monthlyBalanceArr[x-1];
+                  return monthlyBalanceArr[x];
               }
 
               var cMonth = new Date().getMonth(); //Current Month
@@ -208,7 +207,7 @@ router.get('/suggestion', function(req, res, next){
               }
 
               //Total Interest Cost
-              totalInterest = (debt * tranFee) + tempSpend + (debt * interestRate * (12-introLen));
+              totalInterest = (debt * tranFee) + tempSpend + (debt * interestRate * (12 - introLen));
 
 
               /*
@@ -217,7 +216,7 @@ router.get('/suggestion', function(req, res, next){
               Fitness = In dollars the net cost/benefit for a card, this is what is directly compared between cards
               */
 
-              fitness = (totalRewards + signBonus + totalInterest) * pref;
+              fitness = (totalRewards + signBonus - totalInterest) * pref;
 
               //Adds the fitness, Total Rewards, and Total Interest to individual arrays,
               //in order by the original card order
