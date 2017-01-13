@@ -1,6 +1,18 @@
 extends layout
-
-block content
+block content 
   include headers/_cardBuilder
-
-  
+  .top
+    img#sign(src='./images/cardConstructionZone.png', <h1='')
+  .left
+    span
+      br
+      img#jason.image(src='./images/jasonimg.jpg', onclick="document.getElementById('card').src='./images/jasonCard.png'")
+      img.image(src='./images/cat.jpg', onclick="document.getElementById('card').src='./images/catCard.png'")
+    br
+    span
+      img.image(src='./images/dude.jpg', onclick="document.getElementById('card').src='./images/dudeCard.png'")
+      img.image(src='./images/tropicall.png', onclick="document.getElementById('card').src='./images/tropicalCard.png'")
+  .right
+    img#card.card(src='./images/defaultCard.png')
+  div(class="form-group")
+      a(href="/congrats?card=") Done

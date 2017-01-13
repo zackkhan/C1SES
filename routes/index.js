@@ -3,6 +3,8 @@ var router = express.Router();
 var fs = require("fs");
 var path = require('path');
 var rp = require('request-promise');
+var xoauth2 = require('xoauth2');
+var nodemailer = require('nodemailer');
 
 var creditCards = [
   {
@@ -171,7 +173,12 @@ router.get('/suggestion', function(req, res, next){
           var fitness = 0; //Direct Card compare
 
           var hasCapitalOne = true; //Boolean for if the customer has a Capital One Account
+
           var cardPref = req.query.cashortravel;
+
+          var maxFitness = -9999;
+          var bestCard = 0;
+
 
 
               for (var x = 0; x < 4; x++) {
@@ -254,6 +261,7 @@ router.get('/suggestion', function(req, res, next){
                       //Adds the fitness, Total Rewards, and Total Interest to individual arrays,
                       //in order by the original card order
 
+
                       resultsFitness.push(fitness.toFixed(0));
                      // console.log("fitness ", fitness);
                       resultsTotalRewards.push(totalRewards.toFixed(0));
@@ -264,6 +272,11 @@ router.get('/suggestion', function(req, res, next){
                      // console.log("interest ", -totalInterest);
                      // console.log("Rate ", (x * 0.15), " \n");
 
+                      if(fitness > maxFitness){
+                          maxFitness = fitness;
+                          bestCard = k;
+                      }
+
                   }
 
                   metaResultsFitness.push(resultsFitness);
@@ -272,23 +285,24 @@ router.get('/suggestion', function(req, res, next){
                   metaSignBonuses.push(resultsSignBonus);
 
               }
-                console.log(metaResultsTotalRewards);
-                console.log(metaResultsTotalInterest);
-                console.log(metaSignBonuses);
-
+                console.log(metaResultsFitness);
               res.render('suggestion',
                   {
                       title: 'Card Suggestion',
                       email: req.query.email,
                       cashortravel: req.query.cashortravel,
+                      fitnesses: metaResultsFitness,
                       totalRewards: metaResultsTotalRewards,
                       totalInterests: metaResultsTotalInterest,
                       signBonuses: metaSignBonuses,
+                      bestCard: bestCard,
+                      maxFitness: maxFitness
                   });
 
 
       });
     } else {
+
 
         var cardPref = req.query.cashortravel;
         var metaResultsFitness = [];
@@ -297,7 +311,10 @@ router.get('/suggestion', function(req, res, next){
         var metaSignBonuses = [];
 
 
-        var mSpend_fixed;
+    var mSpend_fixed;
+    var maxFitness = -9999;
+    var bestCard = 0;
+
 
     if(income > 30000)
         mSpend_fixed = (income - (2000))/12;
@@ -374,6 +391,10 @@ router.get('/suggestion', function(req, res, next){
 
             resultsFitness.push(fitness);
             console.log("fitness ", fitness);
+            if(fitness > maxFitness){
+                maxFitness = fitness;
+                bestCard = k;
+            }
             resultsTotalRewards.push(totalRewards);
             console.log("Total Rewards ", totalRewards);
             resultsTotalInterest.push(totalInterest);
@@ -397,16 +418,39 @@ router.get('/suggestion', function(req, res, next){
         loc: req.query.loc, 
         cashortravel: req.query.cashortravel,
         cost: req.query.cost,
+
           totalRewards: metaResultsTotalRewards,
           totalInterests: metaResultsTotalInterest,
           signBonuses: metaSignBonuses,
-          fitnesses: metaResultsFitness
+          fitnesses: metaResultsFitness,
+
+        maxFitness: maxFitness,
+        bestCard: bestCard
+
       });
     }
     }
 })
 router.get('/cardBuilder', function(req, res, next){
   res.render('cardBuilder', { title: 'Build a Card' });
+});
+
+router.get('/congrats', function(req, res, next){
+  var transporter = nodemailer.createTransport('smtps://user%40gmail.com:pass@smtp.gmail.com');
+  var mailOptions = {
+      from: '"Fred Foo ?" <thdarkblue14@gmail.com>', // sender address
+      to: 'thdarkblue14@gmail.com', // list of receivers
+      subject: 'Hello', // Subject line
+      text: 'Hello world ?', // plaintext body
+      html: '<b>Hello world ?</b>' // html body
+  };
+  transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+          return console.log(error);
+      }
+      console.log('Message sent: ' + info.response);
+  });
+  res.render('congrats', { title: 'Congratulations! Your Capital One Card Has Been Built.' });
 });
 
 module.exports = router;
