@@ -18,10 +18,11 @@ block content
     | Based on the average cost of living in your area: #{cost}.
   - }
 
-  img(src="/images/cards/card" + bestCard + ".png")
-
-  | Based on your preference of #{cashortravel}.
-  | The suggested card is #{cards[bestCard]} with a fitness score of: #{maxFitness}.
+  .the-card
+    img(src="/images/cards/card" + bestCard + ".png")
+    .text
+        p Based on your preference of #{cashortravel}.
+        p The suggested card is #{cards[bestCard]} with a fitness score of: #{maxFitness}.
 
   .data-manip
     .tabs
