@@ -144,10 +144,11 @@ router.get('/suggestion', function(req, res, next){
           }
           console.log(monthlyBalanceArr);
 
-          var resultsTotalRewards = [0,0,0,0,0];
-          var resultsTotalInterest = [0,0,0,0,0];
-          var resultsSignBonuses = [0,0,0,0,0];
-          var resultsNegInterests = [0,0,0,0,0];
+          var metaResultsFitness = [];
+          var metaResultsTotalRewards = [];
+          var metaResultsTotalInterest = [];
+          var metaSignBonuses = [];
+
 
           //Customer (from fields on Site)
           var debt = 0; //Customer debt
@@ -161,8 +162,13 @@ router.get('/suggestion', function(req, res, next){
           var fitness = 0; //Direct Card compare
 
           /*Iterates through each card using the customer data and outputs the results in order
-            to a set of arrays    */
+            to a set of arrays */
           for(var k = 0; k < creditCards.length; k++){
+
+              var resultsFitness = [];
+              var resultsTotalRewards = [];
+              var resultsTotalInterest = [];
+              var resultsSignBonuses = [];
 
               var cashBack = creditCards[k]["cashBack"];
               var yearFee = creditCards[k]["yearFee"];//Annual Fee
@@ -175,6 +181,7 @@ router.get('/suggestion', function(req, res, next){
               var introLen = creditCards[k]["introLen"]; //Transfer Introductory Interest Rate
               var minSpend = creditCards[k]["minSpend"]; //Signup bonus minimum spend
 
+              console.log("Card: ", creditCards[k]["name"]);
 
               function mSpend(x){ //Monthly Spending calculator
                   
@@ -182,6 +189,7 @@ router.get('/suggestion', function(req, res, next){
               }
 
               var tSpend = monthlySpendArr.reduce(function(a, b) { return a + b; }, 0); //Sets tSpend to the total annual spend
+
 
               function mBalance(x){ //Monthly Account Balance
 
@@ -201,42 +209,55 @@ router.get('/suggestion', function(req, res, next){
               //If not the bonus is set to zero
               if(tempSpend < minSpend) signBonus = 0;
               tempSpend = 0;
+              for(var x = 0; x < 4; x++){
+                  //Calculates the interest paid on the monthly balance/cash flow
+                  for(var i = 0; i <(12 - promoLen); i++) {
+                      tempSpend += interestRate * (mSpend((i + promoLen + cMonth) % 12)) * (x*0.15);
+                  }
 
-              //Calculates the interest paid on the monthly balance/cash flow
-              for(var i = 0; i <(12 - promoLen); i++) {
-                  tempSpend += interestRate * ((mBalance((i + promoLen + cMonth) % 12) + mSpend((i + promoLen + cMonth) % 12)) * .3);
+                  //Total Interest Cost
+                  totalInterest = (debt * tranFee) + tempSpend + (debt * interestRate * (12 - introLen));
+
+
+                  /*
+                  Total Rewards + Signup Bonus = Total Cash Benefit value for 1st Calendar year
+                  Total Interest = Total Interest/Fee payement for 1st Calendar year
+                  Fitness = In dollars the net cost/benefit for a card, this is what is directly compared between cards
+                  */
+
+                  fitness = (totalRewards + signBonus - totalInterest) * pref;
+
+                  //Adds the fitness, Total Rewards, and Total Interest to individual arrays,
+                  //in order by the original card order
+
+                  resultsFitness.push(fitness);
+                  console.log("fitness ", fitness);
+                  resultsTotalRewards.push(totalRewards);
+                  console.log("Total Rewards ", totalRewards);
+                  resultsTotalInterest.push(totalInterest);
+                  resultsSignBonuses.push(signBonus);
+                  console.log("interest ", totalInterest);
+                  console.log("Rate ", (x*0.15), " \n");
+
+
               }
-
-              //Total Interest Cost
-              totalInterest = (debt * tranFee) + tempSpend + (debt * interestRate * (12 - introLen));
-
-
-              /*
-              Total Rewards + Signup Bonus = Total Cash Benefit value for 1st Calendar year
-              Total Interest = Total Interest/Fee payement for 1st Calendar year
-              Fitness = In dollars the net cost/benefit for a card, this is what is directly compared between cards
-              */
-
-              fitness = (totalRewards + signBonus - totalInterest) * pref;
-
-              //Adds the fitness, Total Rewards, and Total Interest to individual arrays,
-              //in order by the original card order
-              resultsTotalRewards[k] = totalRewards;
-              resultsTotalInterest[k] = totalInterest;
-              resultsSignBonuses[k] = signBonus;
-              resultsNegInterests[k] = -1*totalInterest;
-
+              metaResultsFitness.push(resultsFitness);
+              metaResultsTotalInterest.push(resultsTotalInterest);
+              metaResultsTotalRewards.push(resultsTotalRewards);
+              metaSignBonuses.push(resultsSignBonuses);
           }
+
+          console.log(metaResultsTotalInterest);
 
           res.render('suggestion', 
           { 
             title: 'Card Suggestion', 
             email: req.query.email,
             cashortravel: req.query.cashortravel,
-            totalRewards: resultsTotalRewards,
-            totalInterests: resultsTotalInterest,
-            signBonuses: resultsSignBonuses,
-            negInterests: resultsNegInterests
+            fitnesses: metaResultsFitness,
+            totalRewards: metaResultsTotalRewards,
+            totalInterests: metaResultsTotalInterest,
+            signBonuses: metaSignBonuses
           });
       });
     } else {
