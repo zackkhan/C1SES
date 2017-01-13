@@ -1,0 +1,36 @@
+$card: $secondary1
+
+.cards
+    padding: 1rem
+    width: 100px
+    height: 100px
+    +pos-center-col
+
+    .card
+        animation: cards 2s 0s ease-in infinite
+        line-height: 1.5
+        padding-left: 0.5rem
+        color: white
+        font-size: 24px
+        margin-top: -50px
+        width: 70px
+        height: 40px
+        transform: rotate(30deg) translate(20px)
+
+    .card1
+        @extend .card
+        background: $card
+
+    .card2
+        @extend .card
+        background: lighten($card, 15%)
+
+    .card3
+        @extend .card
+        background: lighten($card, 30%)
+
+@keyframes cards
+    0%, 100%
+        margin-top: -42px
+    50%
+        margin-top: -50px
