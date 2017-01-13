@@ -41,7 +41,18 @@ block content
             yAxis: {
                 min: 0,
             },
-
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            enabled: false
+                        }
+                    }
+                }]
+            },
             legend: {
                 align: 'right',
                 verticalAlign: 'middle',

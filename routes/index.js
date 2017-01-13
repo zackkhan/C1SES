@@ -177,8 +177,8 @@ router.get('/suggestion', function(req, res, next){
 
           var maxFitness = -9999;
           var bestCard = 0;
-
-            for (var x = 0; x < 4; x++) {
+          
+          for (var x = 0; x < 4; x++) {
                 /*Iterates through each card using the customer data and outputs the results in order
                 to a set of arrays */
                 var resultsFitness = [];
@@ -238,7 +238,6 @@ router.get('/suggestion', function(req, res, next){
 
                     //Total Interest Cost
                     totalInterest = (debt * tranFee) + tempSpend + (debt * interestRate * (12 - introLen));
-
 
                     /*
                     Total Rewards + Signup Bonus = Total Cash Benefit value for 1st Calendar year
