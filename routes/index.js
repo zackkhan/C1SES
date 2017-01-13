@@ -34,7 +34,7 @@ var creditCards = [
     cashBack: 0.0125,
     yearFee: 0, //Annual Fee
     interestRate: 0.2249, //Interest Rate
-    signBonus: 2000, //Signup Bonus
+    signBonus: 200, //Signup Bonus
     signUpLen: 3, //Signup promo length
     promoLen: 12, //Promotional Interest Length
     tranFee: 0, //Transfer Fee Percentage
@@ -144,9 +144,10 @@ router.get('/suggestion', function(req, res, next){
           }
           console.log(monthlyBalanceArr);
 
-          var resultsFitness = [0,0,0,0,0];
           var resultsTotalRewards = [0,0,0,0,0];
           var resultsTotalInterest = [0,0,0,0,0];
+          var resultsSignBonuses = [0,0,0,0,0];
+          var resultsNegInterests = [0,0,0,0,0];
 
           //Customer (from fields on Site)
           var debt = 0; //Customer debt
@@ -220,11 +221,10 @@ router.get('/suggestion', function(req, res, next){
 
               //Adds the fitness, Total Rewards, and Total Interest to individual arrays,
               //in order by the original card order
-              resultsFitness[k] = fitness;
-              console.log("fitness", fitness);
               resultsTotalRewards[k] = totalRewards;
               resultsTotalInterest[k] = totalInterest;
-              console.log("interest", totalInterest);
+              resultsSignBonuses[k] = signBonus;
+              resultsNegInterests[k] = -1*totalInterest;
 
           }
 
@@ -233,9 +233,10 @@ router.get('/suggestion', function(req, res, next){
             title: 'Card Suggestion', 
             email: req.query.email,
             cashortravel: req.query.cashortravel,
-            fitnesses: resultsFitness,
             totalRewards: resultsTotalRewards,
-            totalInterests: resultsTotalInterest
+            totalInterests: resultsTotalInterest,
+            signBonuses: resultsSignBonuses,
+            negInterests: resultsNegInterests
           });
       });
     } else {
