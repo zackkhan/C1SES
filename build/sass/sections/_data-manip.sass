@@ -1,15 +1,30 @@
-$tab: #f0f0f0
 .data-manip
     +pos-center-col
 .tabs
     +pos-center-row
     width: 100%
+    transition: all ease 300ms
+    height: 5rem
     .tab
+        transition: all ease 300ms
         cursor: pointer
         padding-top: 0.5rem
         padding-bottom: 0.5rem
         padding-left: 1rem
         padding-right: 1rem
         border: $tab solid
+        z-index: 0
+        margin: 0.25rem
+        margin-bottom: 0.5rem
+        &:not(.selected)
+            padding-top: 0.25rem
+            padding-bottom: 0.25rem
+            padding-left: 1rem
+            padding-right: 1rem
         &.selected
-            background-color: $tab
+            color: white
+            font-weight: bold
+            z-index: 1
+            transform: scale(1.05)
+            background: lighten($tab, 3%)
+            box-shadow: 10px 10px 10px -10px darken($tab, 5%)
