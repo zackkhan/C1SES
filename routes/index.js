@@ -358,7 +358,7 @@ router.get('/suggestion', function(req, res, next){
                       resultsTotalInterest.push(totalInterest);
                       resultsSignBonus.push(signBonus);
                       console.log("sign bonus: ", signBonus);
-                      console.log("interest ", -totalInterest);
+                      console.log("interest ", totalInterest);
                       console.log("Rate ", (x * 0.15), " \n");
 
                   }
@@ -369,13 +369,14 @@ router.get('/suggestion', function(req, res, next){
                   metaSignBonuses.push(resultsSignBonus);
 
               }
-              console.log(metaSignBonuses);
+              console.log(metaResultsTotalInterest);
 
               res.render('suggestion',
                   {
                       title: 'Card Suggestion',
                       email: req.query.email,
                       cashortravel: req.query.cashortravel,
+                      fitnesses: metaResultsFitness,
                       totalRewards: metaResultsTotalRewards,
                       totalInterests: metaResultsTotalInterest,
                       signBonuses: metaSignBonuses,
