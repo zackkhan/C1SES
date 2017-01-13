@@ -177,6 +177,8 @@ router.get('/suggestion', function(req, res, next){
 
           var hasCapitalOne = true; //Boolean for if the customer has a Capital One Account
           var cardPref = "cash";
+          var maxFitness = -9999;
+          var bestCard = 0;
 
 
               for (var x = 0; x < 4; x++) {
@@ -262,6 +264,12 @@ router.get('/suggestion', function(req, res, next){
 
                       resultsFitness.push(fitness);
                       console.log("fitness ", fitness);
+
+                      if(fitness > maxFitness){
+                          maxFitness = fitness;
+                          bestCard = k;
+                      }
+
                       resultsTotalRewards.push(totalRewards);
                       console.log("Total Rewards ", totalRewards);
                       resultsTotalInterest.push(totalInterest);
@@ -278,9 +286,7 @@ router.get('/suggestion', function(req, res, next){
                   metaSignBonuses.push(resultsSignBonus);
 
               }
-                console.log(metaResultsTotalRewards);
-                console.log(metaResultsTotalInterest);
-                console.log(metaSignBonuses);
+                console.log(metaResultsFitness);
               res.render('suggestion',
                   {
                       title: 'Card Suggestion',
@@ -290,6 +296,8 @@ router.get('/suggestion', function(req, res, next){
                       totalRewards: metaResultsTotalRewards,
                       totalInterests: metaResultsTotalInterest,
                       signBonuses: metaSignBonuses,
+                      bestCard: bestCard,
+                      maxFitness: maxFitness
                   });
 
 
@@ -297,6 +305,8 @@ router.get('/suggestion', function(req, res, next){
     } else {
 
     var mSpend_fixed;
+    var maxFitness = -9999;
+    var bestCard = 0;
 
     if(income > 30000)
         mSpend_fixed = (income - (2000))/12;
@@ -373,6 +383,10 @@ router.get('/suggestion', function(req, res, next){
 
             resultsFitness.push(fitness);
             console.log("fitness ", fitness);
+            if(fitness > maxFitness){
+                maxFitness = fitness;
+                bestCard = k;
+            }
             resultsTotalRewards.push(totalRewards);
             console.log("Total Rewards ", totalRewards);
             resultsTotalInterest.push(totalInterest);
@@ -395,7 +409,9 @@ router.get('/suggestion', function(req, res, next){
         debt: req.query.debt, 
         loc: req.query.loc, 
         cashortravel: req.query.cashortravel,
-        cost: req.query.cost
+        cost: req.query.cost,
+        maxFitness: maxFitness,
+        bestCard: bestCard
       });
     }
     }
