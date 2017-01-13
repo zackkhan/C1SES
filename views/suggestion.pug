@@ -9,19 +9,16 @@ block content
   - var cards = ["Venture Rewards", "Quicksilver Rewards", "VentureOne Rewards", "QuicksilverOne Rewards", "Platinum"]
 
   - if (typeof(email) !== 'undefined'){
-    | #{email}
     | Based on your transaction history
   - } else {
-    | Based on your inputted income of $#{income}.
-    | Based on your debt of $#{debt}.
-    | Based on your location in: #{loc}.
-    | Based on the average cost of living in your area: #{cost}.
+    | Based on your inputted income of $#{income}
+    | , your debt of $#{debt}
+    | , the average cost of living in your area: #{cost}
   - }
-
+  | , and your preference of #{cashortravel}
+  | we suggest the #{cards[bestCard]} Card with a fitness score of: #{maxFitness}.
+  br
   img(src="/images/cards/card" + bestCard + ".png")
-
-  | Based on your preference of #{cashortravel}.
-  | The suggested card is #{cards[bestCard]} with a fitness score of: #{maxFitness}.
 
   .data-manip
     .tabs
@@ -38,6 +35,9 @@ block content
 
             chart: {
                 type: 'column'
+            },
+            title: {
+                text: 'Card Comparison'
             },
             xAxis: {
                 categories: ["Venture Rewards", "Quicksilver Rewards", "VentureOne Rewards", "QuicksilverOne Rewards", "Platinum"],
@@ -81,15 +81,18 @@ block content
             series: [{
                 name: 'Total Rewards',
                 data: [#{totalRewards[0]}],
-                stack: 'money'
+                stack: 'money',
+                color: '#f4e242'
             }, {
                 name: 'Signing Bonuses',
                 data: [#{signBonuses[0]}],
-                stack: 'money'
+                stack: 'money',
+                color: '#f44242'
             }, {
                 name: 'Total Interests',
                 data: [#{totalInterests[0]}],
-                stack: 'interest'
+                stack: 'interest',
+                color: '#4274f4'
             }]
         });
 
