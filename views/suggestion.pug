@@ -2,6 +2,8 @@ extends layout
 
 block content
   script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.bundle.min.js")
+  script(src="https://code.highcharts.com/highcharts.js")
+  script(src="https://code.highcharts.com/modules/exporting.js")
   include headers/_suggestion
 
   - if (typeof(email) !== 'undefined'){
@@ -17,7 +19,49 @@ block content
   canvas(id="myChart" width="400" height="400")
 
   script.
-    var ctx = document.getElementById("myChart");
+    //var ctx = document.getElementById("myChart");
+    var chart = Highcharts.chart('myChart', {
+
+        chart: {
+            type: 'column'
+        },
+        xAxis: {
+            categories: ["Venture Rewards", "Quicksilver Rewards", "VentureOne Rewards", "QuicksilverOne Rewards", "Platinum"],
+        },
+
+        yAxis: {
+            min: 0,
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [{
+            name: 'John',
+            data: [#{totalRewards[2]}],
+            stack: 'male'
+        }, {
+            name: 'Joe',
+            data: [#{signBonuses[2]}],
+            stack: 'male'
+        }, {
+            name: 'Jane',
+            data: [#{totalInterests[2]}],
+            stack: 'female'
+        }]
+    });
+    /*
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -62,3 +106,4 @@ block content
             }
         }
     });
+    */
