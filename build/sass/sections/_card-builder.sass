@@ -1,0 +1,23 @@
+.card-builder
+    width: 100%
+    +pos-center-row
+
+    .left
+        .card-image
+            transition: all 700ms ease
+            opacity: 0.5
+            height: 60px
+            width: 100px
+            background: center center no-repeat
+            background-size: cover
+            margin: 0.5rem
+            &:hover
+                cursor: pointer
+                opacity: 1
+    .right
+        .card-image
+            transition: all 700ms ease
+            height: 200px
+            width: 300px
+            background: center center no-repeat
+            background-size: cover

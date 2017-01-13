@@ -1,18 +1,18 @@
 extends layout
 block content 
   include headers/_cardBuilder
-  .top
-    img#sign(src='./images/cardConstructionZone.png', <h1='')
-  .left
-    span
-      br
-      img#jason.image(src='./images/jasonimg.jpg', onclick="document.getElementById('card').src='./images/jasonCard.png'")
-      img.image(src='./images/cat.jpg', onclick="document.getElementById('card').src='./images/catCard.png'")
-    br
-    span
-      img.image(src='./images/dude.jpg', onclick="document.getElementById('card').src='./images/dudeCard.png'")
-      img.image(src='./images/tropicall.png', onclick="document.getElementById('card').src='./images/tropicalCard.png'")
-  .right
-    img#card.card(src='./images/defaultCard.png')
+  .card-builder
+    .right
+      img#card.card-image(style='background-image: url(images/defaultCard.png)')
+    .left
+      .card-image(style='background-image: url(images/jasonimg.jpg)', onclick="document.getElementById('card').style='background-image: url(images/jasonCard.png)'")
+
+      .card-image(style='background-image: url(images/cat.jpg)', onclick="document.getElementById('card').style='background-image: url(images/catCard.png)'")
+
+      .card-image(style='background-image: url(images/dude.jpg)', onclick="document.getElementById('card').style='background-image: url(images/dudeCard.png)'")
+
+      .card-image(style='background-image: url(images/tropicall.png)', onclick="document.getElementById('card').style='background-image: url(images/tropicalCard.png)'")
+
+      .card-image(style='background-image: url(images/defaultCard.png)', onclick="document.getElementById('card').style='background-image: url(images/defaultCard.png)'")
   div(class="form-group")
-      a(href="/congrats?card=") Done
+    a(href="/congrats?card=") Done
