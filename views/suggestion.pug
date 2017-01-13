@@ -54,19 +54,16 @@ block content
 
         series: [{
             name: 'Total Rewards',
-            //data: [#{totalRewards[2]}],
-            data: [5, 5, 5, 5, 5],
-            stack: 'male'
+            data: [#{totalRewards[0]}],
+            stack: 'money'
         }, {
             name: 'Signing Bonuses',
-            //data: [#{signBonuses[2]}],
-            data: [5, 5, 5, 5, 5],
-            stack: 'male'
+            data: [#{signBonuses[0]}],
+            stack: 'money'
         }, {
             name: 'Total Interests',
-            //data: [#{totalInterests[2]}],
-            data: [5, 5, 5, 5, 5],
-            stack: 'female'
+            data: [#{totalInterests[0]}],
+            stack: 'interest'
         }]
     });
     (function($){
@@ -91,5 +88,7 @@ block content
     })(jQuery);
 
     function changeData(num){
-      chart.series[0].setData(
+      chart.series[0].setData([#{totalRewards[num]}]);
+      chart.series[1].setData([#{signBonuses[num]}]);
+      chart.series[2].setData([#{totalInterests[num]}]);
     }
