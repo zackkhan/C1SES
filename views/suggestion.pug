@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.bundle.min.js")
+  //script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.bundle.min.js")
   script(src="https://code.highcharts.com/highcharts.js")
   script(src="https://code.highcharts.com/modules/exporting.js")
   include headers/_suggestion
@@ -16,10 +16,15 @@ block content
   - }
   | #{cashortravel}
 
-  canvas(id="myChart" width="400" height="400")
+  .data-manip
+    .tabs
+        .tab 0%
+        .tab 15%
+        .tab 30%
+        .tab 40%
+    div(id="myChart" width="400" height="400")
 
   script.
-    //var ctx = document.getElementById("myChart");
     var chart = Highcharts.chart('myChart', {
 
         chart: {
@@ -48,62 +53,43 @@ block content
         },
 
         series: [{
-            name: 'John',
-            data: [#{totalRewards[2]}],
+            name: 'Total Rewards',
+            //data: [#{totalRewards[2]}],
+            data: [5, 5, 5, 5, 5],
             stack: 'male'
         }, {
-            name: 'Joe',
-            data: [#{signBonuses[2]}],
+            name: 'Signing Bonuses',
+            //data: [#{signBonuses[2]}],
+            data: [5, 5, 5, 5, 5],
             stack: 'male'
         }, {
-            name: 'Jane',
-            data: [#{totalInterests[2]}],
+            name: 'Total Interests',
+            //data: [#{totalInterests[2]}],
+            data: [5, 5, 5, 5, 5],
             stack: 'female'
         }]
     });
-    /*
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Venture Rewards", "Quicksilver Rewards", "VentureOne Rewards", "QuicksilverOne Rewards", "Platinum"],
-            datasets: [{
-                label: 'Total Rewards',
-                data: [#{totalRewards[2]}],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255,99,132,1)',
-                borderWidth: 1
-            },{
-                label: 'Signing Bonuses',
-                data: [#{signBonuses[2]}],
-                backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                borderColor: 'rgba(255, 206, 86, 1)',
-                borderWidth: 1
-            },{
-                //type: 'line',
-                label: 'Total Interests',
-                //data: [#{negInterests}],
-                data: [#{totalInterests[2]}],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    stacked: true,
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }],
-                xAxes: [{
-                    stacked: true,
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-          
-            }
+    (function($){
+       
+        var currentTab = 0;
+        //tabs
+        var tabs = document.getElementsByClassName('tab');
+        $(tabs[0]).addClass('selected');
+        var wasSelected = document.getElementsByClassName('selected')[0];
+        for (i = 0; i < tabs.length; i++) {
+            var newTab = tabs[i];
+            currentTab = i;
+            $(newTab).click(function(){
+                var newTab = this;
+                $(wasSelected).removeClass('selected');
+                $(newTab).addClass('selected');
+                wasSelected = newTab;
+                changeData(currentTab);
+            });
         }
-    });
-    */
+
+    })(jQuery);
+
+    function changeData(num){
+      chart.series[0].setData(
+    }
