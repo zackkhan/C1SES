@@ -8,13 +8,15 @@ block content
 
   - if (typeof(email) !== 'undefined'){
     | #{email}
+    | Based on your transaction history
   - } else {
-    | #{income}
-    | #{debt}
-    | #{loc}
-    | #{cost}
+    | Based on your inputted income of $#{income}.
+    | Based on your debt of $#{debt}.
+    | Based on your location in: #{loc}.
+    | Based on the average cost of living in your area: #{cost}.
   - }
-  | #{cashortravel}
+  | Based on your preference of #{cashortravel}.
+  | The suggested card is #{bestCard} with a fitness score of: #{maxFitness}.
 
   .data-manip
     .tabs
