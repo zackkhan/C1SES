@@ -6,6 +6,8 @@ block content
   script(src="https://code.highcharts.com/modules/exporting.js")
   include headers/_suggestion
 
+  - var cards = ["Venture Rewards", "Quicksilver Rewards", "VentureOne Rewards", "QuicksilverOne Rewards", "Platinum"]
+
   - if (typeof(email) !== 'undefined'){
     | #{email}
     | Based on your transaction history
@@ -15,8 +17,11 @@ block content
     | Based on your location in: #{loc}.
     | Based on the average cost of living in your area: #{cost}.
   - }
+
+  img(src="/images/cards/card" + bestCard + ".png")
+
   | Based on your preference of #{cashortravel}.
-  | The suggested card is #{bestCard} with a fitness score of: #{maxFitness}.
+  | The suggested card is #{cards[bestCard]} with a fitness score of: #{maxFitness}.
 
   .data-manip
     .tabs
