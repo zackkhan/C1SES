@@ -18,56 +18,81 @@ block content
 
   .data-manip
     .tabs
-        .tab 0%
-        .tab 15%
-        .tab 30%
-        .tab 40%
+        .tab(value=0) 0%
+        .tab(value=1) 15%
+        .tab(value=2) 30%
+        .tab(value=3) 40%
     div(id="myChart" width="400" height="400")
 
   script.
-    var chart = Highcharts.chart('myChart', {
 
-        chart: {
-            type: 'column'
-        },
-        xAxis: {
-            categories: ["Venture Rewards", "Quicksilver Rewards", "VentureOne Rewards", "QuicksilverOne Rewards", "Platinum"],
-        },
-
-        yAxis: {
-            min: 0,
-        },
-
-        tooltip: {
-            formatter: function () {
-                return '<b>' + this.x + '</b><br/>' +
-                    this.series.name + ': ' + this.y + '<br/>' +
-                    'Total: ' + this.point.stackTotal;
-            }
-        },
-
-        plotOptions: {
-            column: {
-                stacking: 'normal'
-            }
-        },
-
-        series: [{
-            name: 'Total Rewards',
-            data: [#{totalRewards[0]}],
-            stack: 'money'
-        }, {
-            name: 'Signing Bonuses',
-            data: [#{signBonuses[0]}],
-            stack: 'money'
-        }, {
-            name: 'Total Interests',
-            data: [#{totalInterests[0]}],
-            stack: 'interest'
-        }]
-    });
     (function($){
-       
+        var chart = Highcharts.chart('myChart', {
+
+            chart: {
+                type: 'column'
+            },
+            xAxis: {
+                categories: ["Venture Rewards", "Quicksilver Rewards", "VentureOne Rewards", "QuicksilverOne Rewards", "Platinum"],
+            },
+
+            yAxis: {
+                min: 0,
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'middle',
+                layout: 'vertical'
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                        this.series.name + ': ' + this.y + '<br/>' +
+                        'Total: ' + this.point.stackTotal;
+                }
+            },
+
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                }
+            },
+
+            series: [{
+                name: 'Total Rewards',
+                data: [#{totalRewards[0]}],
+                stack: 'money'
+            }, {
+                name: 'Signing Bonuses',
+                data: [#{signBonuses[0]}],
+                stack: 'money'
+            }, {
+                name: 'Total Interests',
+                data: [#{totalInterests[0]}],
+                stack: 'interest'
+            }]
+        });
+
+        var totalRewards = [
+          [#{totalRewards[0]}],
+          [#{totalRewards[1]}],
+          [#{totalRewards[2]}],
+          [#{totalRewards[3]}]
+        ];
+        var signBonuses = [
+          [#{signBonuses[0]}],
+          [#{signBonuses[1]}],
+          [#{signBonuses[2]}],
+          [#{signBonuses[3]}]
+        ];
+        var totalInterests = [
+          [#{totalInterests[0]}],
+          [#{totalInterests[1]}],
+          [#{totalInterests[2]}],
+          [#{totalInterests[3]}]
+        ];
         var currentTab = 0;
         //tabs
         var tabs = document.getElementsByClassName('tab');
@@ -81,14 +106,12 @@ block content
                 $(wasSelected).removeClass('selected');
                 $(newTab).addClass('selected');
                 wasSelected = newTab;
-                changeData(currentTab);
+                console.log($(newTab).attr("value"));
+                chart.series[0].setData(totalRewards[$(newTab).attr("value")]);
+                chart.series[1].setData(signBonuses[$(newTab).attr("value")]);
+                chart.series[2].setData(totalInterests[$(newTab).attr("value")]);
+                chart.redraw();
             });
         }
 
     })(jQuery);
-
-    function changeData(num){
-      chart.series[0].setData([#{totalRewards[num]}]);
-      chart.series[1].setData([#{signBonuses[num]}]);
-      chart.series[2].setData([#{totalInterests[num]}]);
-    }
