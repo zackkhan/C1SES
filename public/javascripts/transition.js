@@ -3,7 +3,6 @@
     var content;
     var time = 0.0;
     var speed = 2.0;
-    var nextButton;
 
     function ani2() {
         dist = time - 100.0;
@@ -36,11 +35,6 @@
     function readyFn(){
         content = document.getElementsByClassName('main-content')[0];
         loop1();
-        nextButton = document.getElementsByTagName("button");
-
-        for (i = 0; i < nextButton.length; i++)
-            console.log((nextButton[i]).href );
-        //    setTimeout( function() { window.location = nextButton[i].href }, 500 );
     }
     
     $( document ).ready( readyFn );
