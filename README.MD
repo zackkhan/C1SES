@@ -1,6 +1,6 @@
 # Capital One Software Engineering Summit: Hackathon
 
-### To setup
+### Setup
 1. Get the latest node modules by typing `npm install` in the console
 2. Run the server by typing `npm start` in the console
 3. Head to `localhost:3000` to view the app
