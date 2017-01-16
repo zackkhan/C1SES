@@ -1,0 +1,11 @@
+AMAZON.YesIntent yes
+AMAZON.YesIntent yes I want to build a card
+AMAZON.YesIntent sure
+AMAZON.NoIntent no
+AMAZON.NoIntent no I do not want a card
+AMAZON.NoIntent no I would not like to build a capital one card
+AMAZON.HelpIntent  what can I say
+AMAZON.HelpIntent  what can I ask
+AMAZON.StopIntent  stop
+AMAZON.StopIntent  bye
+AMAZON.StopIntent  end
